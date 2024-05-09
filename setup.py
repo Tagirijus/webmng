@@ -4,12 +4,12 @@ from setuptools import setup
 from setuptools import find_packages
 
 setup(
-    name="MODULE_NAME",
+    name="webmng",
     version="1.0.0",
     author="Manuel Senfft",
     author_email="info@tagirijus.de",
-    description="DESCRIPTION",
-    license="BSD",
-    keywords="SOME KEY WORDS",
+    description="A programm for managing some minor server related things.",
+    license="MIT",
+    keywords="server management",
     packages=find_packages()
 )

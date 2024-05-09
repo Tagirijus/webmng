@@ -15,14 +15,7 @@ class Settings(object):
     def initArguments(self):
         self.args = argparse.ArgumentParser(
             description=(
-                'A programm.'
-            )
-        )
-
-        self.args.add_argument(
-            'file',
-            help=(
-                'a file'
+                'A programm for managing some minor server related things.'
             )
         )
 

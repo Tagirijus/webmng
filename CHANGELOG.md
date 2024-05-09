@@ -1,13 +1,7 @@
 # Changelog
 
-Das folgende Changelog-Format basiert auf [Keep a Changelog](http://keepachangelog.com/de/1.0.0/) und hält sich an die [Semantische Versionierung](http://semver.org/spec/v2.0.0.html).
+The following changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and tries to stick to the [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.0.1] - UNRELEASED
 ### Added
-- Hinzugefügt.
-
-### Changed
-- Geändert.
-
-### Fix
-- Gefixt.
+- Initial release of the `webmng` programm.

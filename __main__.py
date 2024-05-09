@@ -1,10 +1,10 @@
 """
-A programm.
+A programm for managing some minor server related things.
 
 Author: Manuel Senfft (www.tagirijus.de)
 """
 
-from MODULNAME.settings import Settings
+from webmng.settings import Settings
 
 
 def main(settings):
