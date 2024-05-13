@@ -3,6 +3,7 @@
 import argparse
 
 
+
 class Settings(object):
     """Settings class."""
 
@@ -18,6 +19,7 @@ class Settings(object):
         )
 
         self.parser.add_argument('-v', '--verbose', action='store_true', help='Verbose mode')
+        self.parser.add_argument('-d', '--data-dir', help='Set a different data directory than ~/.webmng')
 
         # ACTION SUBPARSER
 

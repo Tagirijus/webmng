@@ -5,7 +5,6 @@ class ProjectType(object):
         self, name, start_command=None, stop_command=None, status_command=None, status_regex=None
     ):
         self.NAME = name
-
         self.START_COMMAND = start_command
         self.STOP_COMMAND = stop_command
         self.STATUS_COMMAND = status_command

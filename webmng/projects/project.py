@@ -8,10 +8,6 @@ class Project(object):
     STATUS_INTERRUPTED = 1
     STATUS_ERROR = 0
 
-    PROJECTTYPE = None
-
-    NAME = None
-
 
     # Class methods
 
