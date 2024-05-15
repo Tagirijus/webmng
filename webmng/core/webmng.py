@@ -15,6 +15,15 @@ class Webmng(object):
         self.ARGS = settings.ARGS
         self.FILECONTROLLER = FileController(settings.DATADIR)
 
+    def open_in_editor(self, name, subfolder=None):
+        absolute_filename = self.FILECONTROLLER.create_absolute_filename(name, subfolder)
+        print(
+            Fore.BLUE
+            + f'Opening "{absolute_filename}"'
+            + f' with "{self.SETTINGS.EDITOR}" ...'
+        )
+        subprocess.run([self.SETTINGS.EDITOR, absolute_filename])
+
 
 
     def run(self):
@@ -72,20 +81,19 @@ class Webmng(object):
     def action_add(self):
         # project type
         if self.ARGS.type == 'type':
-            self.add('projecttypes')
+            self.add_type()
 
         # project
         elif self.ARGS.type == 'project':
-            self.add('projects')
+            self.add_project()
 
         # fallback: print help
         else:
             self.SETTINGS.print_help_for_action()
 
-    def add(self, subfolder):
-        PT = ProjectType(self.ARGS.name)
-        if self.FILECONTROLLER.exists(self.ARGS.name, subfolder):
-            print(Fore.RED + f'"{self.ARGS.name}" already exists at "{subfolder}/".')
+    def add_type(self):
+        if self.FILECONTROLLER.exists(self.ARGS.name, 'projecttypes'):
+            print(Fore.RED + f'"{self.ARGS.name}" already exists at "projecttypes/".')
             exit()
         else:
             T = Templates()
@@ -105,10 +113,37 @@ class Webmng(object):
                 user = '1'
             print(Fore.BLUE + f'"{choices[user]}" was chosen. Getting the data ...')
             data = LIST[choices[user]]
-            print(Fore.BLUE + f'Saving "{self.ARGS.name}" at "{subfolder}/" ...')
-            self.FILECONTROLLER.save(data, self.ARGS.name, subfolder)
-            print(Fore.BLUE + f'Opening "{self.ARGS.name}" at "{subfolder}/" with "{self.SETTINGS.EDITOR}" ...')
-            subprocess.run([self.SETTINGS.EDITOR, self.FILECONTROLLER.create_absolute_filename(self.ARGS.name, subfolder)])
+            print(Fore.BLUE + f'Saving "{self.ARGS.name}" at "projecttypes/" ...')
+            self.FILECONTROLLER.save(data, self.ARGS.name, 'projecttypes')
+            self.open_in_editor(self.ARGS.name, 'projecttypes')
+
+    def add_project(self):
+        if self.FILECONTROLLER.exists(self.ARGS.name, 'projects'):
+            print(Fore.RED + f'"{self.ARGS.name}" already exists at "projects/".')
+            exit()
+        else:
+            # TODO:
+            # - project types auflisten und wählen
+            T = Templates()
+            LIST = T.list()
+            print(Fore.RESET + 'Choose from the following templates:')
+            i = 1
+            choices = {}
+            for template in LIST:
+                print(Fore.YELLOW + f'({i})' + Fore.RESET + f' {template}')
+                choices[str(i)] = template
+                i += 1
+            user = input('> ')
+            if user.lower() in ['q', 'quit', 'exit', 'cancel']:
+                print(Fore.RESET + 'Cancelling ...')
+                exit()
+            if user not in choices:
+                user = '1'
+            print(Fore.BLUE + f'"{choices[user]}" was chosen. Getting the data ...')
+            data = LIST[choices[user]]
+            print(Fore.BLUE + f'Saving "{self.ARGS.name}" at "projects/" ...')
+            self.FILECONTROLLER.save(data, self.ARGS.name, 'projects')
+            self.open_in_editor(self.ARGS.name, 'projects')
 
 
 
@@ -126,6 +161,9 @@ class Webmng(object):
             self.SETTINGS.print_help_for_action()
 
     def edit_type(self):
+        if self.FILECONTROLLER.exists(self.ARGS.name, subfolder):
+            print(Fore.RED + f'"{self.ARGS.name}" already exists at "{subfolder}/".')
+            exit()
         print('edit project type ...')
 
     def edit_project(self):
@@ -194,5 +232,4 @@ class Webmng(object):
             print(Fore.BLUE + f'Creating default "config" at "{self.SETTINGS.DATADIR}/" ...')
             self.FILECONTROLLER.save(self.SETTINGS.get_config_as_dict())
         # now load it
-        print(Fore.BLUE + f'Opening "config" at "{self.SETTINGS.DATADIR}/" with "{self.SETTINGS.EDITOR}" ...')
-        subprocess.run([self.SETTINGS.EDITOR, self.FILECONTROLLER.create_absolute_filename()])
+        self.open_in_editor('config')
