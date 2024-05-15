@@ -1,6 +1,8 @@
 """The class holding all the settings."""
 
 import argparse
+import os
+import yaml
 
 
 
@@ -9,9 +11,41 @@ class Settings(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.initArguments()
+        self.DATADIR = os.path.join(os.path.expanduser("~"), '.webmng')
+        self.init_arguments()
+        self.init_config()
 
-    def initArguments(self):
+    def default_config(self):
+        """Set the default config."""
+        # EDITOR
+        self.EDITOR = 'vim'
+
+    def overwrite_config(self, config_data):
+        if 'EDITOR' in config_data:
+            self.EDITOR = config_data['EDITOR']
+
+    def get_config_as_dict(self):
+        return {
+            'EDITOR': self.EDITOR
+        }
+
+    def init_config(self):
+        """
+        Try to get the user set config and fill missing config
+        parts with the default_config() output.
+        """
+        # first set the default config attributes
+        self.default_config()
+
+        # now try to load a config file and replace the respecting configs
+        absolute_config_file = os.path.join(self.DATADIR, 'config.yaml')
+        if os.path.exists(absolute_config_file):
+            with open(absolute_config_file, 'r') as myfile:
+                loaded_config_data = yaml.safe_load(myfile)
+            self.overwrite_config(loaded_config_data)
+
+
+    def init_arguments(self):
         self.parser = argparse.ArgumentParser(
             description=(
                 'A programm for managing some minor server related things.'
@@ -19,7 +53,6 @@ class Settings(object):
         )
 
         self.parser.add_argument('-v', '--verbose', action='store_true', help='Verbose mode')
-        self.parser.add_argument('-d', '--data-dir', help='Set a different data directory than ~/.webmng')
 
         # ACTION SUBPARSER
 
@@ -139,7 +172,7 @@ class Settings(object):
         info_sub_project.add_argument('name', help='Name of the project', nargs='?')
 
 
-        ## START AND STOP AND LIST COMMANDS
+        ## COMMANDS FOR A PROJECT
 
         self.action['start'] = action_parser.add_parser(
             'start',
@@ -155,6 +188,9 @@ class Settings(object):
         )
         self.action['stop'].add_argument('name', help='Name of the project')
 
+
+        # GLOBAL COMMANDS
+
         self.action['list'] = action_parser.add_parser(
             'list',
             help='List all available project types and projects',
@@ -167,8 +203,17 @@ class Settings(object):
             description='Show all project statuses'
         )
 
+        self.action['config'] = action_parser.add_parser(
+            'config',
+            help='Open programm config in editor',
+            description=(
+                'By default or when run for the first time this will open'
+                + ' the config file in vim.'
+            )
+        )
 
-        self.args = self.parser.parse_args()
+
+        self.ARGS = self.parser.parse_args()
 
     def print_help_for_action(self):
-        self.action[self.args.action].print_help()
+        self.action[self.ARGS.action].print_help()

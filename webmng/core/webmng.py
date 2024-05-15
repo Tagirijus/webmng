@@ -12,8 +12,8 @@ class Webmng(object):
 
     def __init__(self, settings):
         self.SETTINGS = settings
-        self.ARGS = settings.args
-        self.FILECONTROLLER = FileController(settings.args.data_dir)
+        self.ARGS = settings.ARGS
+        self.FILECONTROLLER = FileController(settings.DATADIR)
 
 
 
@@ -56,6 +56,11 @@ class Webmng(object):
         # ACTION "STATUS"
         elif self.ARGS.action == 'status':
             self.action_status()
+
+
+        # ACTION "CONFIG"
+        elif self.ARGS.action == 'config':
+            self.action_config()
 
 
         # fallback: print help
@@ -102,8 +107,8 @@ class Webmng(object):
             data = LIST[choices[user]]
             print(Fore.BLUE + f'Saving "{self.ARGS.name}" at "{subfolder}/" ...')
             self.FILECONTROLLER.save(data, self.ARGS.name, subfolder)
-            print(Fore.BLUE + f'Opening "{self.ARGS.name}" at "{subfolder}/" with vim ...')
-            subprocess.run(['vim', self.FILECONTROLLER.create_absolute_filename(self.ARGS.name, subfolder)])
+            print(Fore.BLUE + f'Opening "{self.ARGS.name}" at "{subfolder}/" with "{self.SETTINGS.EDITOR}" ...')
+            subprocess.run([self.SETTINGS.EDITOR, self.FILECONTROLLER.create_absolute_filename(self.ARGS.name, subfolder)])
 
 
 
@@ -181,3 +186,13 @@ class Webmng(object):
 
     def action_status(self):
         print('Showing project statuses ...')
+
+
+    def action_config(self):
+        # probably for the first time, create the config file
+        if not self.FILECONTROLLER.exists():
+            print(Fore.BLUE + f'Creating default "config" at "{self.SETTINGS.DATADIR}/" ...')
+            self.FILECONTROLLER.save(self.SETTINGS.get_config_as_dict())
+        # now load it
+        print(Fore.BLUE + f'Opening "config" at "{self.SETTINGS.DATADIR}/" with "{self.SETTINGS.EDITOR}" ...')
+        subprocess.run([self.SETTINGS.EDITOR, self.FILECONTROLLER.create_absolute_filename()])
