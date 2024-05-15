@@ -88,4 +88,12 @@ class FileController(object):
         return loaded_data
 
     def exists(self, filename='config', subfolder=None):
-        return os.path.exists(self.create_absolute_filename(filename, subfolder))
+        if filename is None:
+            return False
+        else:
+            return os.path.exists(self.create_absolute_filename(filename, subfolder))
+
+    def remove(self, filename='config', subfolder=None):
+        absolute_filename = self.create_absolute_filename(filename, subfolder)
+        if os.path.exists(absolute_filename):
+            os.remove(absolute_filename)

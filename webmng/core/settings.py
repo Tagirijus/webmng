@@ -106,14 +106,14 @@ class Settings(object):
             help='Edit a project type',
             description='Edit a project type'
         )
-        edit_sub_type.add_argument('name', help='Name of the project type', nargs='?')
+        edit_sub_type.add_argument('name', help='Name of the project type')
 
         edit_sub_project = edit_sub.add_parser(
             'project',
             help='Edit a project',
             description='Edit a project'
         )
-        edit_sub_project.add_argument('name', help='Name of the project', nargs='?')
+        edit_sub_project.add_argument('name', help='Name of the project')
 
 
         ## DELETE ACTION WITH SUBPARSER
@@ -134,14 +134,14 @@ class Settings(object):
             help='Delete a project type',
             description='Delete a project type'
         )
-        delete_sub_type.add_argument('name', help='Name of the project type', nargs='?')
+        delete_sub_type.add_argument('name', help='Name of the project type')
 
         delete_sub_project = delete_sub.add_parser(
             'project',
             help='Delete a project',
             description='Delete a project'
         )
-        delete_sub_project.add_argument('name', help='Name of the project', nargs='?')
+        delete_sub_project.add_argument('name', help='Name of the project')
 
 
         ## INFO ACTION WITH SUBPARSER
@@ -162,14 +162,14 @@ class Settings(object):
             help='Get info about a project type',
             description='Get info about a project type'
         )
-        info_sub_type.add_argument('name', help='Name of the project type', nargs='?')
+        info_sub_type.add_argument('name', help='Name of the project type')
 
         info_sub_project = info_sub.add_parser(
             'project',
             help='Get info about a project',
             description='Get info about a project'
         )
-        info_sub_project.add_argument('name', help='Name of the project', nargs='?')
+        info_sub_project.add_argument('name', help='Name of the project')
 
 
         ## COMMANDS FOR A PROJECT

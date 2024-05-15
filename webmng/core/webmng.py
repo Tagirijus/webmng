@@ -185,7 +185,19 @@ class Webmng(object):
             self.SETTINGS.print_help_for_action()
 
     def delete_type(self):
-        print('delete project type ...')
+        if not self.FILECONTROLLER.exists(self.ARGS.name, 'projecttypes'):
+            print(Fore.RED + f'Project type "{self.ARGS.name}" does not exist.')
+            exit()
+        else:
+            absolute_filename = self.FILECONTROLLER.create_absolute_filename(self.ARGS.name, 'projecttypes')
+            print(Fore.RED + f'Really delete "{absolute_filename}"?')
+            user = input(Fore.RESET + '> ')
+            if user.lower() in ['y', 'yes']:
+                print(Fore.YELLOW + f'Deleting "{absolute_filename}" ...')
+                self.FILECONTROLLER.remove(self.ARGS.name, 'projecttypes')
+            else:
+                print('Cancelling ...')
+                exit()
 
     def delete_project(self):
         print('delete project ...')
