@@ -46,6 +46,10 @@ class Templates(object):
         """
         An empty template for a project.
         """
+        self.start_command = ''
+        self.stop_command = ''
+        self.status_command = ''
+        self.status_regex = r''
         return self.get()
 
     def docker(self):
