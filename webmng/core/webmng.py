@@ -161,10 +161,11 @@ class Webmng(object):
             self.SETTINGS.print_help_for_action()
 
     def edit_type(self):
-        if self.FILECONTROLLER.exists(self.ARGS.name, subfolder):
-            print(Fore.RED + f'"{self.ARGS.name}" already exists at "{subfolder}/".')
+        if not self.FILECONTROLLER.exists(self.ARGS.name, 'projecttypes'):
+            print(Fore.RED + f'Project type "{self.ARGS.name}" does not exist.')
             exit()
-        print('edit project type ...')
+        else:
+            self.open_in_editor(self.ARGS.name, 'projecttypes')
 
     def edit_project(self):
         print('edit project ...')
