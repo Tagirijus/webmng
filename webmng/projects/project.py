@@ -61,13 +61,6 @@ class Project(Base):
     def get_name(self):
         return self.NAME
 
-    def get_projecttype(self) -> str:
-        """
-        This method will return the type string
-        for the project.
-        """
-        return self.PROJECTTYPE.get_name()
-
     def get_status(self, verbose=False) -> int:
         """
         This method will return the status of the project.
