@@ -6,7 +6,7 @@ from webmng.projects.projecttype import ProjectType
 class Project(Base):
     """Project for webmng"""
 
-    # Class attributes
+    # Class attributes, which won't be saved
 
     STATUS_RUNNING = 3
     STATUS_STOPPED = 2
