@@ -1,3 +1,6 @@
+from webmng.projects.projecttype import ProjectType
+
+
 class Project(object):
     """Base for a webmng project"""
 
@@ -11,9 +14,28 @@ class Project(object):
 
     # Class methods
 
-    def __init__(self, name, projecttype):
+    def __init__(self, name='', projecttype=None):
         self.NAME = name
-        self.PROJECTTYPE = projecttype
+        if projecttype is None:
+            self.PROJECTTYPE = ProjectType()
+        else:
+            self.PROJECTTYPE = projecttype
+
+    def __str__(self):
+        return self.get_name()
+
+    def from_dict(self, dic):
+        # TODO
+        pass
+
+    def to_dict(self):
+        return {
+            'NAME': self.NAME,
+            'PROJECTTYPE': self.PROJECTTYPE.get_name()
+        }
+
+    def get_name(self):
+        return self.NAME
 
     def get_projecttype(self) -> str:
         """

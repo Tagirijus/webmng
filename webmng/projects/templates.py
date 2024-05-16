@@ -19,23 +19,23 @@ class Templates(object):
         would be a more clever way to have some
         kind of soft-interface, technically.
         """
-        self.start_command = ''
-        self.stop_command = ''
-        self.status_command = ''
-        self.status_regex = r''
+        self.START_COMMAND = ''
+        self.STOP_COMMAND = ''
+        self.STATUS_COMMAND = ''
+        self.STATUS_REGEX = r''
 
     def get(self):
         """
         Gets the class attributes and return them in a dict.
         """
         return {
-            'start_command': self.start_command,
-            'stop_command': self.stop_command,
-            'status_command': self.status_command,
-            'status_regex': self.status_regex
+            'START_COMMAND': self.START_COMMAND,
+            'STOP_COMMAND': self.STOP_COMMAND,
+            'STATUS_COMMAND': self.STATUS_COMMAND,
+            'STATUS_REGEX': self.STATUS_REGEX
         }
 
-    def list(self):
+    def get_list(self):
         return {
             'empty': self.empty(),
             'docker': self.docker(),
@@ -46,10 +46,10 @@ class Templates(object):
         """
         An empty template for a project.
         """
-        self.start_command = ''
-        self.stop_command = ''
-        self.status_command = ''
-        self.status_regex = r''
+        self.START_COMMAND = ''
+        self.STOP_COMMAND = ''
+        self.STATUS_COMMAND = ''
+        self.STATUS_REGEX = r''
         return self.get()
 
     def docker(self):
@@ -58,10 +58,10 @@ class Templates(object):
 
         The template for a docker project.
         """
-        self.start_command = 'echo "starting docker %NAME%"'
-        self.stop_command = 'echo "stopping docker %NAME%"'
-        self.status_command = 'echo "getting docker status for %NAME% - okay?"'
-        self.status_regex = r'\bokay\?\b'
+        self.START_COMMAND = 'echo "starting docker %NAME%"'
+        self.STOP_COMMAND = 'echo "stopping docker %NAME%"'
+        self.STATUS_COMMAND = 'echo "getting docker status for %NAME% - okay?"'
+        self.STATUS_REGEX = r'\bokay\?\b'
         return self.get()
 
     def apachesite(self):
@@ -70,8 +70,8 @@ class Templates(object):
 
         The template for an apache site project.
         """
-        self.start_command = 'echo "starting apachesite %NAME%"'
-        self.stop_command = 'echo "stopping apachesite %NAME%"'
-        self.status_command = 'echo "getting apachesite status for %NAME% - okay?"'
-        self.status_regex = r'\bokay\?\b'
+        self.START_COMMAND = 'echo "starting apachesite %NAME%"'
+        self.STOP_COMMAND = 'echo "stopping apachesite %NAME%"'
+        self.STATUS_COMMAND = 'echo "getting apachesite status for %NAME% - okay?"'
+        self.STATUS_REGEX = r'\bokay\?\b'
         return self.get()

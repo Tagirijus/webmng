@@ -1,19 +1,18 @@
 from colorama import Fore, Back, Style
 import subprocess
-from webmng.core.filecontroller import FileController
+from webmng.core.base import Base
 from webmng.projects.project import Project
 from webmng.projects.projecttype import ProjectType
+from webmng.projects.projecttypelist import ProjectTypeList
 from webmng.projects.templates import Templates
 
 
 
-class Webmng(object):
+class Webmng(Base):
     """Class for controlling the logic flow of the programm."""
 
     def __init__(self, settings):
-        self.SETTINGS = settings
-        self.ARGS = settings.ARGS
-        self.FILECONTROLLER = FileController(settings.DATADIR)
+        super().__init__(settings)
 
     def open_in_editor(self, name, subfolder=None):
         absolute_filename = self.FILECONTROLLER.create_absolute_filename(name, subfolder)
@@ -97,7 +96,7 @@ class Webmng(object):
             exit()
         else:
             T = Templates()
-            LIST = T.list()
+            LIST = T.get_list()
             print(Fore.RESET + 'Choose from the following templates:')
             i = 1
             choices = {}
@@ -111,8 +110,9 @@ class Webmng(object):
                 exit()
             if user not in choices:
                 user = '1'
-            print(Fore.BLUE + f'"{choices[user]}" was chosen. Getting the data ...')
+            print(Fore.BLUE + f'"{choices[user]}" was chosen. Creating project type from template ...')
             data = LIST[choices[user]]
+            data['NAME'] = self.ARGS.name
             print(Fore.BLUE + f'Saving "{self.ARGS.name}" at "projecttypes/" ...')
             self.FILECONTROLLER.save(data, self.ARGS.name, 'projecttypes')
             self.open_in_editor(self.ARGS.name, 'projecttypes')
@@ -122,16 +122,21 @@ class Webmng(object):
             print(Fore.RED + f'"{self.ARGS.name}" already exists at "projects/".')
             exit()
         else:
-            # TODO:
-            # - project types auflisten und wählen
-            T = Templates()
-            LIST = T.list()
-            print(Fore.RESET + 'Choose from the following templates:')
+            PTL = ProjectTypeList(self.SETTINGS)
+            LIST = PTL.get_list()
+            if len(LIST) == 0:
+                print(
+                    Fore.YELLOW + 'No project type defined. Use'
+                    + Style.DIM + ' webmng add type [NAME]'
+                    + Style.NORMAL + ' to add new project type.'
+                )
+                exit()
+            print(Fore.RESET + 'Choose from the following project types:')
             i = 1
             choices = {}
-            for template in LIST:
-                print(Fore.YELLOW + f'({i})' + Fore.RESET + f' {template}')
-                choices[str(i)] = template
+            for projecttype in LIST:
+                print(Fore.YELLOW + f'({i})' + Fore.RESET + f' {str(projecttype)}')
+                choices[str(i)] = projecttype
                 i += 1
             user = input('> ')
             if user.lower() in ['q', 'quit', 'exit', 'cancel']:
@@ -139,10 +144,10 @@ class Webmng(object):
                 exit()
             if user not in choices:
                 user = '1'
-            print(Fore.BLUE + f'"{choices[user]}" was chosen. Getting the data ...')
-            data = LIST[choices[user]]
+            print(Fore.BLUE + f'"{choices[user]}" was chosen. Creating project with this type ...')
+            P = Project(self.ARGS.name, choices[user])
             print(Fore.BLUE + f'Saving "{self.ARGS.name}" at "projects/" ...')
-            self.FILECONTROLLER.save(data, self.ARGS.name, 'projects')
+            self.FILECONTROLLER.save(P.to_dict(), self.ARGS.name, 'projects')
             self.open_in_editor(self.ARGS.name, 'projects')
 
 
@@ -168,7 +173,11 @@ class Webmng(object):
             self.open_in_editor(self.ARGS.name, 'projecttypes')
 
     def edit_project(self):
-        print('edit project ...')
+        if not self.FILECONTROLLER.exists(self.ARGS.name, 'projects'):
+            print(Fore.RED + f'Project "{self.ARGS.name}" does not exist.')
+            exit()
+        else:
+            self.open_in_editor(self.ARGS.name, 'projects')
 
 
     def action_delete(self):
@@ -200,7 +209,19 @@ class Webmng(object):
                 exit()
 
     def delete_project(self):
-        print('delete project ...')
+        if not self.FILECONTROLLER.exists(self.ARGS.name, 'projects'):
+            print(Fore.RED + f'Project "{self.ARGS.name}" does not exist.')
+            exit()
+        else:
+            absolute_filename = self.FILECONTROLLER.create_absolute_filename(self.ARGS.name, 'projects')
+            print(Fore.RED + f'Really delete "{absolute_filename}"?')
+            user = input(Fore.RESET + '> ')
+            if user.lower() in ['y', 'yes']:
+                print(Fore.YELLOW + f'Deleting "{absolute_filename}" ...')
+                self.FILECONTROLLER.remove(self.ARGS.name, 'projects')
+            else:
+                print('Cancelling ...')
+                exit()
 
 
     def action_info(self):

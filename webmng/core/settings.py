@@ -21,8 +21,7 @@ class Settings(object):
         self.EDITOR = 'vim'
 
     def overwrite_config(self, config_data):
-        if 'EDITOR' in config_data:
-            self.EDITOR = config_data['EDITOR']
+        self.EDITOR = config_data.get('EDITOR', self.EDITOR)
 
     def get_config_as_dict(self):
         return {
