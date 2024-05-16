@@ -66,7 +66,7 @@ class Project(Base):
         This method will return the type string
         for the project.
         """
-        return self.PROJECTTYPE
+        return self.PROJECTTYPE.get_name()
 
     def get_status(self, verbose=False) -> int:
         """
