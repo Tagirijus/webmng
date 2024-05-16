@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from webmng.core.base import Base
 from webmng.projects.projecttype import ProjectType
@@ -24,6 +25,12 @@ class Project(Base):
             self.PROJECTTYPE = projecttype
         else:
             self.load_projecttype(projecttype)
+        today_date = datetime.now()
+        self.LAST_STARTED = today_date.strftime('%Y-%m-%d %H:%M:%S')
+        # if this attribute is set, it means that the project
+        # should basically not be running. otherwise this
+        # attribut is set to "None"
+        self.LAST_ENDED = today_date.strftime('%Y-%m-%d %H:%M:%S')
 
     def __str__(self):
         return self.get_name()
@@ -39,11 +46,16 @@ class Project(Base):
         self.NAME = dic.get('NAME', self.NAME)
         if 'PROJECTTYPE' in dic:
             self.load_projecttype(dic['PROJECTTYPE'])
+        self.LAST_STARTED = dic.get('LAST_STARTED', self.LAST_STARTED)
+        if 'LAST_ENDED' in dic:
+            self.LAST_ENDED = None if dic['LAST_ENDED'] == "None" else dic['LAST_ENDED']
 
     def to_dict(self):
         return {
             'NAME': self.NAME,
-            'PROJECTTYPE': self.PROJECTTYPE.get_name()
+            'PROJECTTYPE': self.PROJECTTYPE.get_name(),
+            'LAST_STARTED': self.LAST_STARTED,
+            'LAST_ENDED': self.LAST_ENDED,
         }
 
     def get_name(self):
