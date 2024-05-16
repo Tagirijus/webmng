@@ -1,8 +1,10 @@
+import os
+from webmng.core.base import Base
 from webmng.projects.projecttype import ProjectType
 
 
-class Project(object):
-    """Base for a webmng project"""
+class Project(Base):
+    """Project for webmng"""
 
     # Class attributes
 
@@ -14,19 +16,29 @@ class Project(object):
 
     # Class methods
 
-    def __init__(self, name='', projecttype=None):
+    def __init__(self, settings, name='', projecttype=None):
+        super().__init__(settings)
         self.NAME = name
-        if projecttype is None:
-            self.PROJECTTYPE = ProjectType()
-        else:
+        self.PROJECTTYPE = ProjectType()
+        if isinstance(projecttype, ProjectType):
             self.PROJECTTYPE = projecttype
+        else:
+            self.load_projecttype(projecttype)
 
     def __str__(self):
         return self.get_name()
 
+    def load_projecttype(self, projecttypename):
+        if os.path.exists(self.FILECONTROLLER.create_absolute_filename(str(projecttypename), 'projecttypes')):
+            dic = self.FILECONTROLLER.load(projecttypename, 'projecttypes')
+            PT = ProjectType()
+            PT.from_dict(dic)
+            self.PROJECTTYPE = PT
+
     def from_dict(self, dic):
-        # TODO
-        pass
+        self.NAME = dic.get('NAME', self.NAME)
+        if 'PROJECTTYPE' in dic:
+            self.load_projecttype(dic['PROJECTTYPE'])
 
     def to_dict(self):
         return {

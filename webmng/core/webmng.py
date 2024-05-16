@@ -145,7 +145,7 @@ class Webmng(Base):
             if user not in choices:
                 user = '1'
             print(Fore.BLUE + f'"{choices[user]}" was chosen. Creating project with this type ...')
-            P = Project(self.ARGS.name, choices[user])
+            P = Project(self.SETTINGS, self.ARGS.name, choices[user])
             print(Fore.BLUE + f'Saving "{self.ARGS.name}" at "projects/" ...')
             self.FILECONTROLLER.save(P.to_dict(), self.ARGS.name, 'projects')
             self.open_in_editor(self.ARGS.name, 'projects')
@@ -170,6 +170,14 @@ class Webmng(Base):
             print(Fore.RED + f'Project type "{self.ARGS.name}" does not exist.')
             exit()
         else:
+            # first load it, load the available data and save it again,
+            # so that missing keys (which were added later in the programm)
+            # will be available as well (in their default value)
+            dic = self.FILECONTROLLER.load(self.ARGS.name, 'projecttypes')
+            PT = ProjectType()
+            PT.from_dict(dic)
+            self.FILECONTROLLER.save(PT.to_dict(), self.ARGS.name, 'projecttypes')
+            # and THEN open this updated file
             self.open_in_editor(self.ARGS.name, 'projecttypes')
 
     def edit_project(self):
@@ -177,6 +185,14 @@ class Webmng(Base):
             print(Fore.RED + f'Project "{self.ARGS.name}" does not exist.')
             exit()
         else:
+            # first load it, load the available data and save it again,
+            # so that missing keys (which were added later in the programm)
+            # will be available as well (in their default value)
+            dic = self.FILECONTROLLER.load(self.ARGS.name, 'projects')
+            P = Project(self.SETTINGS)
+            P.from_dict(dic)
+            self.FILECONTROLLER.save(P.to_dict(), self.ARGS.name, 'projects')
+            # and THEN open this updated file
             self.open_in_editor(self.ARGS.name, 'projects')
 
 
