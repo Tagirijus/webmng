@@ -21,7 +21,7 @@ class Site(object):
 
     def __str__(self):
         is_up = 'up' if self.is_up() else 'down'
-        return f'{self.get_name()} --> {self.get_domain()}:{self.get_port()} [{is_up}]'
+        return f'{self.get_name():<{20}} --> {self.get_domain():>{10}}:{self.get_port():<{6}} [{is_up}]'
 
     def init_content(self):
         out = ''
