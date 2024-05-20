@@ -19,19 +19,16 @@ class Settings(object):
     def default_config(self):
         """Set the default config."""
         self.EDITOR = 'vim'
-        self.SITESAVAILABLEDIR = '/etc/apache2/sites-available'
-        self.SITESENABLEDDIR = '/etc/apache2/sites-enabled'
+        self.SITES_DIR = '/etc/apache2/sites-available'
 
     def overwrite_config(self, config_data):
         self.EDITOR = config_data.get('EDITOR', self.EDITOR)
-        self.SITESAVAILABLEDIR = config_data.get('SITESAVAILABLEDIR', self.SITESAVAILABLEDIR)
-        self.SITESENABLEDDIR = config_data.get('SITESENABLEDDIR', self.SITESENABLEDDIR)
+        self.SITES_DIR = config_data.get('SITES_DIR', self.SITES_DIR)
 
     def get_config_as_dict(self):
         return {
             'EDITOR': self.EDITOR,
-            'SITESAVAILABLEDIR': self.SITESAVAILABLEDIR,
-            'SITESENABLEDDIR': self.SITESENABLEDDIR
+            'SITES_DIR': self.SITES_DIR
         }
 
     def init_config(self):

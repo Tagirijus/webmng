@@ -1,6 +1,7 @@
 from colorama import Fore, Back, Style
 import os
 import subprocess
+from webmng.site import Site
 import yaml
 
 
@@ -33,9 +34,11 @@ class Webmng(object):
 
     def get_sites(self):
         if self.SITES is None:
-            for filename in os.listdir('/etc/apache2/sites-available'):
+            self.SITES = []
+            for filename in os.listdir(self.SETTINGS.SITES_DIR):
                 if filename.lower().endswith('.conf'):
-                    print(os.path.join(directory, filename))
+                    conf_filename = os.path.join(self.SETTINGS.SITES_DIR, filename)
+                    self.SITES.append(Site(conf_filename))
         return self.SITES
 
 
@@ -119,8 +122,10 @@ class Webmng(object):
 
 
     def action_list(self):
-        print('Listing projects ...')
+        print('Listing sites ...')
+        for site in self.get_sites():
+            print(site)
 
 
     def action_monitor(self):
-        print('Showing project statuses ...')
+        print('Showing sites statuses ...')
