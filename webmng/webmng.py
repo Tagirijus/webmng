@@ -11,6 +11,7 @@ class Webmng(object):
     def __init__(self, settings):
         self.SETTINGS = settings
         self.ARGS = settings.ARGS
+        self.SITES = None
 
     def open_in_editor(self, filename):
         print(
@@ -29,6 +30,13 @@ class Webmng(object):
         )
         with open(filename, 'w') as myfile:
             yaml.dump(data, myfile, default_flow_style=False)
+
+    def get_sites(self):
+        if self.SITES is None:
+            for filename in os.listdir('/etc/apache2/sites-available'):
+                if filename.lower().endswith('.conf'):
+                    print(os.path.join(directory, filename))
+        return self.SITES
 
 
 
@@ -103,7 +111,9 @@ class Webmng(object):
         # probably for the first time, create the config file
         if not os.path.exists(self.SETTINGS.CONFIGFILE):
             print(Fore.BLUE + f'Creating default "config" at "{self.SETTINGS.DATADIR}/" ...')
-            self.save_dict(self.SETTINGS.get_config_as_dict(), self.SETTINGS.CONFIGFILE)
+        # then save it, yet also save it eveytime to fill new attributes, which
+        # were added later in the development
+        self.save_dict(self.SETTINGS.get_config_as_dict(), self.SETTINGS.CONFIGFILE)
         # now load it
         self.open_in_editor(self.SETTINGS.CONFIGFILE)
 

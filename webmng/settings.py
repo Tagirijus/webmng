@@ -18,15 +18,20 @@ class Settings(object):
 
     def default_config(self):
         """Set the default config."""
-        # EDITOR
         self.EDITOR = 'vim'
+        self.SITESAVAILABLEDIR = '/etc/apache2/sites-available'
+        self.SITESENABLEDDIR = '/etc/apache2/sites-enabled'
 
     def overwrite_config(self, config_data):
         self.EDITOR = config_data.get('EDITOR', self.EDITOR)
+        self.SITESAVAILABLEDIR = config_data.get('SITESAVAILABLEDIR', self.SITESAVAILABLEDIR)
+        self.SITESENABLEDDIR = config_data.get('SITESENABLEDDIR', self.SITESENABLEDDIR)
 
     def get_config_as_dict(self):
         return {
-            'EDITOR': self.EDITOR
+            'EDITOR': self.EDITOR,
+            'SITESAVAILABLEDIR': self.SITESAVAILABLEDIR,
+            'SITESENABLEDDIR': self.SITESENABLEDDIR
         }
 
     def init_config(self):
@@ -38,9 +43,8 @@ class Settings(object):
         self.default_config()
 
         # now try to load a config file and replace the respecting configs
-        absolute_config_file = os.path.join(self.DATADIR, 'config.yaml')
-        if os.path.exists(absolute_config_file):
-            with open(absolute_config_file, 'r') as myfile:
+        if os.path.exists(self.CONFIGFILE):
+            with open(self.CONFIGFILE, 'r') as myfile:
                 loaded_config_data = yaml.safe_load(myfile)
             self.overwrite_config(loaded_config_data)
 
