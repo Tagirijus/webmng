@@ -2,21 +2,9 @@ A programm for managing some minor server related things.
 
 # Description
 
-Here I try to write down my initial idea before I start to code. I might change the text later.
+First of all: I am a total noob and probably coded something in a waste of hours for some really minor task.
 
-With this programm I wanted to code my own very easy _server monitoring and managing_ programm. I know that there are certain server monitoring tools. Yet a) I have not much experience with servers so far and b) I wanted a very ultra easy and basic tool, where I know what it does and why.
-
-The initial idea basically is for this tool to be able to:
-
-- list which kind of web server projects are running and what their status is _(e.g. docker container or apache routes, etc.)_
-- being able to start or stop a project _(e.g. starting a docker container, or enablign/disabling a apache site)_
-- being able to set up subdomains based on a template
-
-The list should be a color coded and easy to read list where I can see, summarized, what the status of projects are. Also it should be able to show, if e.g. some docker containers were stopped unexpected or so.
-
-Underlying I imagine that this programm mainly is based rather on some kind of scripts. The idea might change during the coding process, not sure. The idea behind all this is that I do not want to have differnet places and remember different commands to see how my web projects are running. Instead I want just one tool to rule certain differnet things. Then I know how to start the programm and the commands / arguments are always the same, despite the kind of project typ (docker container, apache site, maybe nodeJS project at some point, etc.).
-
-I plan to make this whole tool open source and public. Let's see where the journey will lead me.
+This programm is for creating, enabling, disabling and somehow even "monitor" Apache2 server sites. You will be able to add new sites, enable them, disable them or delete them. Then there is the monitoring mode, which will stay alive in the foreground and list changes in the `/etc/apache2/sites-enabled` folder every N seconds. The plan is that this will make the tool suitable for [pm2](https://pm2.keymetrics.io/) (hopefully ...). Did I mention that I am a total noob?
 
 # Installation
 

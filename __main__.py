@@ -4,8 +4,8 @@ A programm for managing some minor server related things.
 Author: Manuel Senfft (www.tagirijus.de)
 """
 
-from webmng.core.settings import Settings
-from webmng.core.webmng import Webmng
+from webmng.settings import Settings
+from webmng.webmng import Webmng
 
 
 
