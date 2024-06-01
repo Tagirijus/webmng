@@ -18,7 +18,7 @@ class Settings(object):
 
     def default_config(self):
         """Set the default config."""
-        self.EDITOR = 'vim'
+        self.EDITOR = 'vi'
         self.SITES_DIR = '/etc/apache2/sites-available'
 
     def overwrite_config(self, config_data):
