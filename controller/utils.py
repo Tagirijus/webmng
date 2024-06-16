@@ -1,4 +1,3 @@
-from colorama import Fore, Back, Style
 import os
 import subprocess
 from model.settings import Settings
