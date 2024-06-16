@@ -64,7 +64,6 @@ def config():
     By default or when run for the first time this will open
     the config file in vi.
     """
-    S = Settings()
     utils.edit_config()
 
 
