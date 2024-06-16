@@ -32,7 +32,7 @@ def edit_config():
 
     # probably for the first time, create the config file
     if not os.path.exists(S.CONFIGFILE):
-        s.print_info(f'Creating default "config" at "{S.DATADIR}/" ...')
+        p.print_info(f'Creating default "config" at "{S.DATADIR}/" ...')
     # then save it, yet also save it eveytime to fill new attributes, which
     # were added later in the development
     save_dict(S.get_config_as_dict(), S.CONFIGFILE)
